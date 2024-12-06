@@ -19,6 +19,13 @@
   //I2C
   const int I2C_SDA = 21;
   const int I2C_SCL = 22;
+  //一バイト目
+  char direction;
+  //MOTOR5
+  char MOTOR5;
+  char MOTOR6;
+  char MOTOR7;
+  char MOTOR8;
 
 void setup() {
   setCpuFrequencyMhz(160);
@@ -72,5 +79,6 @@ void setup() {
 }
 
 void loop() {
-  
+　
+  Serial.println();
 }
