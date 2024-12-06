@@ -1,3 +1,4 @@
+#include <ESP32-TWAI-CAN.hpp>
 //Boad pin
   //CAN
   #define CAN_TX  25
@@ -19,13 +20,15 @@
   //I2C
   const int I2C_SDA = 21;
   const int I2C_SCL = 22;
-  //一バイト目
-  char direction;
-  //MOTOR5
-  char MOTOR5;
-  char MOTOR6;
-  char MOTOR7;
-  char MOTOR8;
+  int direction;
+  int MOTOR5;
+  int MOTOR6;
+  int MOTOR7;
+  int MOTOR8;
+  int MOTOR5d;
+  int MOTOR6d;
+  int MOTOR7d;
+  int MOTOR8d;
 
 void setup() {
   setCpuFrequencyMhz(160);
@@ -62,24 +65,40 @@ void setup() {
   ledcAttachPin(PWM1_2, 1); 
   ledcAttachPin(PWM2_1, 2); 
   ledcAttachPin(PWM2_2, 3);
-  ledcAttachPin(PWM1_1, 4); 
-  ledcAttachPin(PWM1_2, 5); 
-  ledcAttachPin(PWM2_1, 6); 
-  ledcAttachPin(PWM2_2, 7);
+  ledcAttachPin(PWM3_1, 4); 
+  ledcAttachPin(PWM3_2, 5); 
+  ledcAttachPin(PWM4_1, 6); 
+  ledcAttachPin(PWM4_2, 7);
   
   //LOW
-  digitalWrite(pwm1_1, LOW);
-  digitalWrite(pwm1_2, LOW);
-  digitalWrite(pwm2_1, LOW);
-  digitalWrite(pwm2_2, LOW);
-  digitalWrite(pwm3_1, LOW);
-  digitalWrite(pwm3_2, LOW);
-  digitalWrite(pwm4_1, LOW);
-  digitalWrite(pwm4_2, LOW);
+  digitalWrite(PWM1_1, LOW);
+  digitalWrite(PWM1_2, LOW);
+  digitalWrite(PWM2_1, LOW);
+  digitalWrite(PWM2_2, LOW);
+  digitalWrite(PWM3_1, LOW);
+  digitalWrite(PWM3_2, LOW);
+  digitalWrite(PWM4_1, LOW);
+  digitalWrite(PWM4_2, LOW);
+}
+
+uint8_t computeCRC8(uint8_t *data, size_t len) {
+  uint8_t crc = 0xFF;
+  for (size_t i = 0; i < len; ++i) {
+    crc ^= data[i];
+    for (uint8_t j = 0; j < 8; j++) {
+      if (crc & 0x80)
+        crc = (crc << 1) ^ 0x31;
+      else
+        crc <<= 1;
+    }
+  }
+  return crc;
 }
 
 void loop() {
-  byte dataToSend[5] = {0x0A, 0x80, 0x80, 0x80, 0x80};
+  direction = (MOTOR8d << 3) | (MOTOR7d << 2) | (MOTOR6d << 1) | MOTOR5d;
+  byte dataToSend[5] = {static_cast<byte>(direction), static_cast<byte>(MOTOR5), static_cast<byte>(MOTOR6), static_cast<byte>(MOTOR7), static_cast<byte>(MOTOR8)};
+  uint8_t crc = computeCRC8(dataToSend, sizeof(dataToSend));
   Serial.write(dataToSend, sizeof(dataToSend));
-  Serial.println();
+  Serial.write(crc);
 }
