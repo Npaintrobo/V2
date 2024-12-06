@@ -79,6 +79,7 @@ void setup() {
 }
 
 void loop() {
-　
+  byte dataToSend[5] = {0x0A, 0x80, 0x80, 0x80, 0x80};
+  Serial.write(dataToSend, sizeof(dataToSend));
   Serial.println();
 }
