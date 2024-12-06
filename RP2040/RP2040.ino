@@ -10,7 +10,14 @@ const int PWM8_2 = 7;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(
+  pinMode(PWM5_1,OUTPUT);
+  pinMode(PWM5_2,OUTPUT);
+  pinMode(PWM6_1,OUTPUT);
+  pinMode(PWM6_2,OUTPUT); 
+  pinMode(PWM7_1,OUTPUT);
+  pinMode(PWM7_2,OUTPUT);
+  pinMode(PWM8_1,OUTPUT);
+  pinMode(PWM8_2,OUTPUT);
 }
 
 void loop() {
@@ -19,4 +26,5 @@ void loop() {
     Serial.print("Receive:");
     Serial.println(data);
   }
+　analogWrite(PWM5_1,100);
 }
