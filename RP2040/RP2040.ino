@@ -41,7 +41,7 @@ void setup() {
 }
 
 void loop() {
-  if (Serial1.available() >= 6) {  // 5 bytes data + 1 byte CRC
+  if (Serial1.available() >= 7) {  // 5 bytes data + 1 byte CRC +/n
     byte dataReceived[5];
     for (int i = 0; i < 5; i++) {
       dataReceived[i] = Serial1.read();
