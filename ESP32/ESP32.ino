@@ -101,4 +101,5 @@ void loop() {
   uint8_t crc = computeCRC8(dataToSend, sizeof(dataToSend));
   Serial.write(dataToSend, sizeof(dataToSend));
   Serial.write(crc);
+  Serial.pritnt("\n")
 }
